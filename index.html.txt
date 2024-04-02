@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mike Chiwen Chang - Personal Website</title>
+</head>
+<body>
+    <header>
+        <h1>Mike Chiwen Chang</h1>
+        <p><a href="www.linkedin.com/in/syntizen">LinkedIn</a> | <a href="mailto:syntizen@gmail.com">Email</a></p>
+    </header>
+
+    <section id="education">
+        <h2>Education</h2>
+        <p>Ph.D. in Mechanical Engineering - University of Texas at San Antonio</p>
+        <p>M.S. in Mechanical Engineering - National Taiwan University</p>
+    </section>
+
+    <section id="experience">
+        <h2>Professional Experience</h2>
+        <!-- Example entry, repeat for other roles -->
+        <div>
+            <h3>Data Scientist & Graduate Research Assistant - University of Texas at San Antonio</h3>
+            <p>Duration: 2020/02 – 2023/12</p>
+            <ul>
+                <li>Develop Prototypical Neural Network model for Transfer learning and Active learning.</li>
+                <!-- More bullet points -->
+            </ul>
+        </div>
+        <!-- Repeat for other positions -->
+    </section>
+
+    <section id="skills">
+        <h2>Skills</h2>
+        <ul>
+            <li>Tensor-flow</li>
+            <li>Python</li>
+            <li>Machine Learning</li>
+            <!-- More skills -->
+        </ul>
+    </section>
+
+    <section id="certifications">
+        <h2>Certifications</h2>
+        <p>Lean and Six Sigma Green Belt Certificate - Credential ID: 2018-04-23-040</p>
+    </section>
+
+    <section id="lithography">
+        <h2>Lithography Experience</h2>
+        <p>Dr. Chang's extensive experience in photomasking technology...</p>
+        <!-- Detailed experience -->
+    </section>
+
+</body>
+</html>

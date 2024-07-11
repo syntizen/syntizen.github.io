@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mike C. Chang, Ph.D. - Resume</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .contact-info {
+            margin-bottom: 20px;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+        }
+        .experience-item {
+            margin-bottom: 20px;
+        }
+        ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+        .skills {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .skills ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .skills li {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            background-color: #e0e0e0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .prezi-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+        .prezi-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        @media (min-width: 768px) {
+            .main-content {
+                flex-direction: row;
+            }
+            .left-column {
+                flex: 7;
+                margin-right: 20px;
+            }
+            .right-column {
+                flex: 3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mike C. Chang, Ph.D.</h1>
+        <div class="contact-info">
+            <p>
+                <a href="https://www.linkedin.com/in/syntizen">www.linkedin.com/in/syntizen</a> |
+                <a href="mailto:syntizen@gmail.com">syntizen@gmail.com</a> |
+                San Antonio, Texas | (281) 691-2993
+            </p>
+        </div>
+    </header>
+
+    <p>Dr. Chang, with 10+ years expertise in engineering, manufacturing, and science research, proficient in the design and analysis of Mechanical Engineering with a strong foundation in computer science, thermal science, fabrication processes, and computational analysis. My research application is in Data-driven science and Lean six-sigma manufacturing.</p>
+
+    <div class="prezi-container">
+        <iframe src="https://prezi.com/embed/bybwjwlmcc6j/" frameborder="0" webkitallowfullscreen="1" mozallowfullscreen="1" allowfullscreen="1"></iframe>
+    </div>
+
+    <div class="main-content">
+        <div class="left-column">
+            <h2>PROFESSIONAL EXPERIENCE</h2>
+
+            <div class="experience-item">
+                <h3>University of Texas at San Antonio | San Antonio, Texas</h3>
+                <h4>Graduate Research Assistant at Advanced Data Engineering Lab 2017/08 – 2023/12</h4>
+                <ul>
+                    <li>Developed a Prototypical Neural Network model for Transfer learning and Active learning.</li>
+                    <li>Achieved event recognition machine learning with wavelet-analysis for Schlumberger®.</li>
+                    <li>Designed an Indoor Locating System using multi-Stream RFID detection, improving customer satisfaction for Eye Associates of South Texas®.</li>
+                    <li>Utilized Deep Learning (TCN) to predict patient glucose levels, advancing medical analytics.</li>
+                    <li>Summarized complex Graphical Models of Medical Lexicon, streamlining knowledge extraction processes.</li>
+                    <li>Developed an OCR, automating invoice processing, increasing efficiency for Andeavor®.</li>
+                </ul>
+
+                <h4>Graduate Teaching Assistant 2018/01 – 2021/01</h4>
+                <ul>
+                    <li>ME-3113: Measurements & Instrumentation</li>
+                    <li>ME-3293: Thermodynamics</li>
+                    <li>ME-1403: Engineering Practice and Graphics practices</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>National Taiwan University | Taipei, Taiwan</h3>
+                <h4>Mechatronic Engineer & Researcher at Micro Biomechatronic Lab 2015/12 – 2017/07</h4>
+                <ul>
+                    <li>Mastered cleanroom fabrication techniques by maintaining and operating metal etching, O2 plasma equipment maintenance, ITO etching, Silica bonding, micro milling fabrication.</li>
+                    <li>Engineered a 3-axis conveying robot integrated with UV indirect microscopy, microfluidic chip design and fabrication, image tracking and recognition, cloud controller, and IoT server enabled system for automated microscale manipulation and analysis.</li>
+                    <li>Innovated microscopy thermal-couple sensor to create 80-micron metal bonding.</li>
+                    <li>Advanced spectroscopic capabilities by conducting spectrum analysis across IR to UV bands.</li>
+                    <li>Pioneered portable genetic inspection technology by developing cleanroom fabrication processes for DNA-PCR chips and automating the Polymerase Chain Reaction procedure.</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>ASUS Computer | Taipei, Taiwan</h3>
+                <h4>NPI Production Engineer at ASUS® Quality Assurance Center 2014/09 – 2015/08</h4>
+                <ul>
+                    <li>Serviced at the New Product Introduction (NPI) division.</li>
+                    <li>Monitored board level SMT packaging and testing procedure includes Radio Frequency qualification among 2G, 3G, 4G, LTE, WIFI, GPS, and Bluetooth, along with baseband circuit, acoustic mechanism, camera modules, display panel, and certain interactive sensors.</li>
+                    <li>Designed the very first sets of testing equipment for mobile devices and was responsible for introducing new product testing technology with corresponding field training. Also cooperate with worldwide EMS (Electronic Manufacturing Services) including Quanta Computer®, Pegatron Corp®, Qisda Corp®, Foxconn® in managing supply chain, quality control, data analysis, production flow setup, and troubleshooting.</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>National Taiwan University | Taipei, Taiwan</h3>
+                <h4>Research Assistant at Production System Simulation Lab, μMT Lab 2011/09 – 2013/06</h4>
+                <ul>
+                    <li>Responsible for procurement management, including bidding, tender opening, delivery, inspection, and calibration, covering the procurement process of a 5-axis CNC machine center and a 532-nanometer YAG laser system build -up and servo instrument system (2.5M NTD).</li>
+                    <li>Facilitated communication between suppliers and internal stakeholders to ensure project progress and budget compliance.</li>
+                </ul>
+            </div>
+
+            <h2>PROJECTS</h2>
+            <h3>Lean Manufacturing and Quality Control</h3>
+            <ul>
+                <li>Improving Efficiency through Value Stream Mapping: Case Study of Maintenance System 2018/08 - 2018/12</li>
+                <li>Statistical Mixture Design – A Civil Engineering Case Study 2018/08 - 2018/12</li>
+                <li>Modulus of Elasticity: A Procedure Improvement Analysis 2018/01 - 2018/05</li>
+            </ul>
+
+            <h2>HIGHER LEVEL EDUCATION</h2>
+            <p>Ph.D. in Mechanical Engineering - University of Texas at San Antonio 2017/08 - 2023/12<br>
+            Dissertation: Data-driven Process Flow Modeling and Optimization using Indoor RFID Locating System<br>
+            Center for Advanced Manufacturing and Lean Systems, Advanced Data Engineering Lab</p>
+
+            <p>M.S. in Mechanical Engineering - National Taiwan University 2011/09 - 2013/06<br>
+            Thesis: Applying Ink-jet Patterned Sensor in On-line Cutting Temperature Monitoring<br>
+            Production System Simulation Lab, μMT Lab</p>
+
+            <h2>PROFESSIONAL CERTIFICATION</h2>
+            <p>Lean and Six Sigma Green Belt Certificate<br>
+            Center for Advanced Manufacturing and Lean Systems (CAMLS) at UTSA 2021/05<br>
+            Credential ID: 2018-04-23-040</p>
+
+            <h2>SELECT PUBLICATIONS / PRESENTATIONS</h2>
+            <ol>
+                <li>Mike C. Chang, Adel Alaeddini. "Few-shot Classification with Prototypical Neural Network for Hospital Flow Recognition under Uncertainty". Network Modeling Analysis in Health Informatics and Bioinformatics 13, 19 (2024)</li>
+                <li>Mike C. Chang, Adel Alaeddini. "Anomaly Detection of Equipment Flow with Prototypical Neural Network". (Revision)</li>
+                <li>Mike C. Chang, Stanford Martinez, Hung-da Wan, Adel Alaeddini. "Rapid Deployment of Indoor Rooms Personnel Localization with Passive RFID in Healthcare Facility'" International Journal of Services Operations and Informatics (Revision)</li>
+                <li>Mike C. Chang, Syed Hasib Akhter Faruqui, Hung-da Wan, Adel Alaeddini. "Evaluation and Improvement of Student Learning Experience in Post-COVID World: A Lean Six-Sigma DMAIC Study." International Journal of Mechanical Engineering Education (2023)</li>
+                <li>Li, Kuan-Ming, Chi-Wen Chang, and Chia-Hao Chang. "Online cutting temperature prediction using ink-jet printed sensors and model order reduction method." The International Journal of Advanced Manufacturing Technology 120.3 (2022)</li>
+                <li>Faruqui, Syed Hasib Akhter, Adel Alaeddini, Mike C. Chang, Sara Shirinkam, Carlos Jaramillo, Peyman NajafiRad, Jing Wang, and Mary Jo Pugh. "Summarizing complex graphical models of multiple chronic conditions using the second eigenvalue of graph Laplacian: algorithm development and validation." JMIR medical informatics 8, no. 6 (2020): e16372.</li>
+                <li>Chi-Wen Chang, Jing Wang, Adel Alaeddini. "Using Deep Learning for Predicting the Trajectory of Glucose Level in Patients with Type II Diabetes." Institute of Industrial and Systems Engineers Annual Conference (2019)</li>
+                <li>Chi-Wen Chang, Yen-Kun Lai, Ming-Tsung Hung." Design of Micro-Electronic-Mechanical-Systems - A study on the Imitation Arthropod Micro-mechanical walking devices." NCU-HU Exchange Conference at Hiroshima University, Japan (2009)</li>
+            </ol>
+        </div>
+
+        <div class="right-column">
+            <div class="skills">
+                <h2>RELATED SKILLS</h2>
+                <ul>
+                    <li>Data-driven Engineering</li>
+                    <li>Signal Process</li>
+                    <li>High Performance Computation HPC</li>
+                    <li>Pytorch</li>
+                    <li>Machine Learning</li>
+                    <li>Deep Neural Net</li>
+                    <li>Pytorch</li>
+                    <li>Sensors</li>
+                    <li>Thermodynamics</li>
+                    <li>SolidWorks CAD</li>
+                    <li>Lecturing</li>
+                    <li>Lithography</li>
+                    <li>Wet Etching</li>
+                    <li>Thermal sensor/heater Microfabrication</li>
+                    <li>Infrared Photography</li>
+                    <li>Lab-on-a-chip</li>
+                    <li>Arc Welding</li>
+                    <li>Plasma Bonding</li>
+                    <li>Quality System</li>
+                    <li>C++, Terminal</li>
+                    <li>Microchip SoC</li>
+                    <li>Electrical Layout</li>
+                    <li>Mass Production</li>
+                    <li>Oscilloscope</li>
+                    <li>Spectrum, Logic Analyzer</li>
+                    <li>Semiconductor fabrication</li>
+                    <li>Laser cutting</li>
+                    <li>Procurement management</li>
+                    <li>Bidding process</li>
+                    <li>Manufacturing Equipment Design</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

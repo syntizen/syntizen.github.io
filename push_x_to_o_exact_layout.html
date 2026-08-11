@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Push X to O</title>
+<style>
+  :root { --s: 70px; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: #1d1d1d;
+    font-family: system-ui, sans-serif;
+    color: #eee;
+  }
+  .wrap { text-align:center; }
+  h1 { font-size: 22px; margin: 0 0 12px; }
+  #game {
+    display: grid;
+    grid-template-columns: repeat(5, var(--s));
+    grid-template-rows: repeat(8, var(--s));
+    gap: 2px;
+    padding: 3px;
+    background: #111;
+    border-radius: 3px;
+    box-shadow: 0 8px 30px #0008;
+  }
+  .cell {
+    width: var(--s);
+    height: var(--s);
+    position: relative;
+    display: grid;
+    place-items: center;
+    font-size: 42px;
+    line-height: 1;
+    user-select: none;
+  }
+  .wall {
+    background: linear-gradient(135deg,#9b9b9b,#b3b3b3);
+    border: 2px solid #737373;
+    box-shadow: inset 1px 1px #d0d0d0, inset -2px -2px #666;
+  }
+  .floor { background: #555; }
+  .center { background: #f0c63f; }
+  .target {
+    color: #aaa;
+    text-shadow: 0 1px 1px #333;
+  }
+  .center.target { color: #d9a927; }
+  .box {
+    color: #b58a14;
+    font-size: 46px;
+    font-weight: 300;
+    text-shadow: 0 1px 0 #f8df73;
+  }
+  .player::before {
+    content: "";
+    width: 12px;
+    height: 28px;
+    border-radius: 50%;
+    background: #222;
+    box-shadow:
+      2px 0 0 #eee,
+      5px 0 0 #111,
+      0 0 4px #000;
+    transform: rotate(-18deg);
+  }
+  .box.done { color: #9c7610; }
+  #status { height: 28px; margin-top: 12px; font-weight: 700; }
+  button {
+    border: 0;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .controls {
+    margin-top: 10px;
+    color: #aaa;
+    font-size: 13px;
+  }
+  @media (max-width: 430px) {
+    :root { --s: 56px; }
+    .cell { font-size: 34px; }
+    .box { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Push X to O</h1>
+  <div id="game"></div>
+  <div id="status"></div>
+  <button onclick="reset()">Restart</button>
+  <div class="controls">Arrow keys / WASD · R = restart · Z = undo</div>
+</div>
+
+<script>
+// EXACT 5 × 8 arrangement from the uploaded picture.
+//
+// Row 1:  # # # # #
+// Row 2:  # O O O #
+// Row 3:  # . X . #
+// Row 4:  # P X . #
+// Row 5:  # . X . #
+// Row 6:  # . X . #
+// Row 7:  # O O O #
+// Row 8:  # # # # #
+//
+// There are 4 X blocks and 6 O targets, matching the picture.
+
+const walls = new Set();
+const targets = new Set([
+  "1,1", "2,1", "3,1",
+  "1,6", "2,6", "3,6"
+]);
+
+let player, boxes, history;
+
+function key(x,y) { return `${x},${y}`; }
+
+function reset() {
+  player = {x:1, y:3};
+  boxes = [
+    {x:2, y:2},
+    {x:2, y:3},
+    {x:2, y:4},
+    {x:2, y:5}
+  ];
+  history = [];
+  document.getElementById("status").textContent = "";
+  draw();
+}
+
+for (let y=0; y<8; y++) {
+  for (let x=0; x<5; x++) {
+    if (x===0 || x===4 || y===0 || y===7) walls.add(key(x,y));
+  }
+}
+
+function boxAt(x,y) {
+  return boxes.findIndex(b => b.x===x && b.y===y);
+}
+
+function walkable(x,y) {
+  return x>=0 && x<5 && y>=0 && y<8 && !walls.has(key(x,y));
+}
+
+function save() {
+  history.push(JSON.stringify({player, boxes}));
+}
+
+function undo() {
+  if (!history.length) return;
+  const s = JSON.parse(history.pop());
+  player = s.player;
+  boxes = s.boxes;
+  document.getElementById("status").textContent = "";
+  draw();
+}
+
+function move(dx,dy) {
+  const nx = player.x + dx, ny = player.y + dy;
+  if (!walkable(nx,ny)) return;
+
+  const i = boxAt(nx,ny);
+
+  // Walking into empty space.
+  if (i < 0) {
+    save();
+    player = {x:nx,y:ny};
+    draw();
+    return;
+  }
+
+  // Push one X.
+  const bx = nx + dx, by = ny + dy;
+  if (!walkable(bx,by) || boxAt(bx,by) >= 0) return;
+
+  save();
+  boxes[i] = {x:bx,y:by};
+  player = {x:nx,y:ny};
+  draw();
+
+  if (boxes.every(b => targets.has(key(b.x,b.y)))) {
+    document.getElementById("status").textContent = "🎉 Solved!";
+  }
+}
+
+function draw() {
+  const game = document.getElementById("game");
+  game.innerHTML = "";
+
+  for (let y=0; y<8; y++) {
+    for (let x=0; x<5; x++) {
+      const c = document.createElement("div");
+      c.className = "cell";
+
+      if (walls.has(key(x,y))) {
+        c.classList.add("wall");
+      } else {
+        c.classList.add("floor");
+        if (x===2) c.classList.add("center");
+        if (targets.has(key(x,y))) {
+          c.classList.add("target");
+          c.textContent = "○";
+        }
+
+        const bi = boxAt(x,y);
+        if (bi >= 0) {
+          c.classList.add("box");
+          if (targets.has(key(x,y))) c.classList.add("done");
+          c.textContent = "×";
+        }
+
+        if (player.x===x && player.y===y) c.classList.add("player");
+      }
+
+      game.appendChild(c);
+    }
+  }
+}
+
+document.addEventListener("keydown", e => {
+  const k = e.key.toLowerCase();
+  if (["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","r","z"].includes(k))
+    e.preventDefault();
+
+  if (k==="r") reset();
+  else if (k==="z") undo();
+  else if (k==="arrowup" || k==="w") move(0,-1);
+  else if (k==="arrowdown" || k==="s") move(0,1);
+  else if (k==="arrowleft" || k==="a") move(-1,0);
+  else if (k==="arrowright" || k==="d") move(1,0);
+});
+
+reset();
+</script>
+</body>
+</html>

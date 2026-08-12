@@ -4,167 +4,202 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Push X to O</title>
+<title>Push X to O — IQ 150 Challenge</title>
 
 <style>
+:root {
+  --s: 52px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at center, #292929 0%, #151515 70%);
+  font-family: system-ui, sans-serif;
+  color: #eee;
+}
+
+.wrap {
+  text-align: center;
+  width: min(96vw, 850px);
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.subtitle {
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+select,
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 13px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+select {
+  background: #eee;
+  color: #222;
+}
+
+button {
+  background: #eee;
+  color: #222;
+}
+
+button:hover {
+  opacity: .85;
+}
+
+#game {
+  display: grid;
+  gap: 2px;
+  width: max-content;
+  margin: 0 auto;
+  padding: 4px;
+  background: #090909;
+  border-radius: 5px;
+  box-shadow:
+    0 15px 45px #000b,
+    0 0 0 1px #333;
+}
+
+.cell {
+  width: var(--s);
+  height: var(--s);
+  display: grid;
+  place-items: center;
+  position: relative;
+  user-select: none;
+  font-size: 31px;
+  line-height: 1;
+}
+
+.wall {
+  background:
+    linear-gradient(135deg,#8c8c8c,#b2b2b2);
+  border: 2px solid #686868;
+  box-shadow:
+    inset 1px 1px #d5d5d5,
+    inset -2px -2px #555;
+}
+
+.floor {
+  background: #4d4d4d;
+}
+
+.target {
+  color: #c5c5c5;
+  text-shadow: 0 2px 2px #222;
+}
+
+.box {
+  color: #d0a52b;
+  font-size: 39px;
+  font-weight: 300;
+  text-shadow:
+    0 1px #ffe98a,
+    0 2px 2px #333;
+}
+
+.box.done {
+  color: #e3c044;
+  text-shadow:
+    0 1px #fff09a,
+    0 2px 2px #333;
+}
+
+.player::before {
+  content: "";
+  width: 13px;
+  height: 30px;
+  border-radius: 50%;
+  background: #171717;
+  box-shadow:
+    2px 0 #eee,
+    5px 0 #111,
+    0 0 5px #000;
+  transform: rotate(-18deg);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.stats span {
+  color: #aaa;
+}
+
+.stats b {
+  color: #fff;
+}
+
+#status {
+  min-height: 25px;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.controls {
+  color: #888;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.difficulty {
+  margin-top: 5px;
+  color: #d6b33c;
+  font-size: 12px;
+  letter-spacing: .5px;
+}
+
+@media (max-width: 650px) {
   :root {
-    --s: 60px;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: #1d1d1d;
-    font-family: system-ui, sans-serif;
-    color: #eee;
-  }
-
-  .wrap {
-    text-align: center;
-    max-width: 95vw;
-  }
-
-  h1 {
-    font-size: 22px;
-    margin: 0 0 8px;
-  }
-
-  #game {
-    display: grid;
-    gap: 2px;
-    padding: 3px;
-    background: #111;
-    border-radius: 3px;
-    box-shadow: 0 8px 30px #0008;
-    margin: 0 auto;
-    width: max-content;
+    --s: 38px;
   }
 
   .cell {
-    width: var(--s);
-    height: var(--s);
-    position: relative;
-    display: grid;
-    place-items: center;
-    font-size: 38px;
-    line-height: 1;
-    user-select: none;
-  }
-
-  .wall {
-    background: linear-gradient(
-      135deg,
-      #9b9b9b,
-      #b3b3b3
-    );
-
-    border: 2px solid #737373;
-
-    box-shadow:
-      inset 1px 1px #d0d0d0,
-      inset -2px -2px #666;
-  }
-
-  .floor {
-    background: #555;
-  }
-
-  .center {
-    background: #f0c63f;
-  }
-
-  .target {
-    color: #aaa;
-    text-shadow: 0 1px 1px #333;
-  }
-
-  .center.target {
-    color: #d9a927;
+    font-size: 24px;
   }
 
   .box {
-    color: #b58a14;
-    font-size: 42px;
-    font-weight: 300;
-    text-shadow: 0 1px 0 #f8df73;
-  }
-
-  .box.done {
-    color: #9c7610;
+    font-size: 29px;
   }
 
   .player::before {
-    content: "";
-
-    width: 12px;
-    height: 28px;
-
-    border-radius: 50%;
-
-    background: #222;
-
-    box-shadow:
-      2px 0 0 #eee,
-      5px 0 0 #111,
-      0 0 4px #000;
-
-    transform: rotate(-18deg);
+    width: 10px;
+    height: 23px;
   }
-
-  #status {
-    min-height: 28px;
-    margin-top: 10px;
-    font-weight: 700;
-  }
-
-  button {
-    border: 0;
-    border-radius: 6px;
-    padding: 9px 16px;
-    font-size: 15px;
-    cursor: pointer;
-    margin: 3px;
-  }
-
-  button:hover {
-    opacity: 0.85;
-  }
-
-  .controls {
-    margin-top: 8px;
-    color: #aaa;
-    font-size: 13px;
-  }
-
-  #stageSelect {
-    margin: 4px 0 8px;
-    padding: 7px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-
-  @media (max-width: 700px) {
-    :root {
-      --s: 42px;
-    }
-
-    .cell {
-      font-size: 28px;
-    }
-
-    .box {
-      font-size: 32px;
-    }
-  }
+}
 </style>
 </head>
-
 
 <body>
 
@@ -172,28 +207,52 @@
 
   <h1>Push X to O</h1>
 
-  <!-- Stage selector -->
-  <select id="stageSelect"
-          onchange="selectStage(this.value)">
-  </select>
+  <div class="subtitle">
+    IQ 150 Sokoban Challenge
+  </div>
 
-  <!-- Game board -->
+  <div class="topbar">
+
+    <select id="stageSelect"
+            onchange="loadStage(Number(this.value))">
+    </select>
+
+    <button onclick="restartStage()">
+      Restart
+    </button>
+
+    <button onclick="undo()">
+      Undo
+    </button>
+
+    <button id="nextButton"
+            onclick="nextStage()"
+            style="display:none;">
+      Next Stage →
+    </button>
+
+  </div>
+
   <div id="game"></div>
 
-  <!-- Status -->
+  <div class="stats">
+    <div>
+      <span>Moves:</span>
+      <b id="moves">0</b>
+    </div>
+
+    <div>
+      <span>Pushes:</span>
+      <b id="pushes">0</b>
+    </div>
+  </div>
+
   <div id="status"></div>
 
-  <!-- Controls -->
-  <button onclick="reset()">Restart</button>
-
-  <button id="nextBtn"
-          onclick="nextStage()"
-          style="display:none;">
-    Next Stage →
-  </button>
+  <div class="difficulty" id="difficulty"></div>
 
   <div class="controls">
-    Arrow keys / WASD · R = restart · Z = undo
+    Arrow Keys / WASD · Z = Undo · R = Restart
   </div>
 
 </div>
@@ -202,300 +261,242 @@
 <script>
 
 /* ============================================================
-   PUSH X TO O
-   10 STAGES
+   STAGE FORMAT
+
+   # = wall
+   space = floor
+   . = target
+   X = box
+   P = player
    ============================================================ */
 
-const LEVELS = [
-
-  /* ----------------------------------------------------------
-     STAGE 1
-     ---------------------------------------------------------- */
-
-  {
-    name: "First Push",
-
-    width: 5,
-    height: 8,
-
-    player: [1, 3],
-
-    boxes: [
-      [2, 2],
-      [2, 3],
-      [2, 4],
-      [2, 5]
-    ],
-
-    targets: [
-      [1, 1],
-      [2, 1],
-      [3, 1],
-      [1, 6],
-      [2, 6],
-      [3, 6]
-    ]
-  },
 
-
-  /* ----------------------------------------------------------
-     STAGE 2
-     ---------------------------------------------------------- */
-
-  {
-    name: "Offset",
-
-    width: 7,
-    height: 8,
-
-    player: [1, 6],
-
-    boxes: [
-      [2, 2],
-      [3, 3],
-      [3, 4],
-      [4, 5]
-    ],
-
-    targets: [
-      [2, 1],
-      [3, 1],
-      [4, 1],
-      [2, 6],
-      [3, 6],
-      [4, 6]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 3
-     ---------------------------------------------------------- */
-
-  {
-    name: "Corners",
-
-    width: 8,
-    height: 8,
-
-    player: [1, 6],
-
-    boxes: [
-      [2, 2],
-      [3, 3],
-      [4, 3],
-      [5, 4]
-    ],
-
-    targets: [
-      [2, 1],
-      [4, 1],
-      [5, 6],
-      [6, 6]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 4
-     ---------------------------------------------------------- */
-
-  {
-    name: "Crossroads",
-
-    width: 9,
-    height: 9,
-
-    player: [1, 7],
-
-    boxes: [
-      [3, 2],
-      [5, 2],
-      [3, 5],
-      [5, 5]
-    ],
-
-    targets: [
-      [2, 1],
-      [6, 1],
-      [2, 7],
-      [6, 7]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 5
-     ---------------------------------------------------------- */
-
-  {
-    name: "Narrow Passage",
-
-    width: 9,
-    height: 9,
-
-    player: [1, 7],
-
-    boxes: [
-      [3, 2],
-      [4, 3],
-      [5, 4],
-      [4, 5]
-    ],
-
-    targets: [
-      [2, 1],
-      [6, 1],
-      [2, 7],
-      [6, 7]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 6
-     ---------------------------------------------------------- */
-
-  {
-    name: "Spiral",
-
-    width: 10,
-    height: 10,
-
-    player: [1, 8],
-
-    boxes: [
-      [3, 2],
-      [6, 2],
-      [3, 6],
-      [6, 6]
-    ],
-
-    targets: [
-      [2, 1],
-      [7, 1],
-      [2, 8],
-      [7, 8]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 7
-     ---------------------------------------------------------- */
-
-  {
-    name: "Four Corners",
-
-    width: 10,
-    height: 10,
-
-    player: [1, 8],
-
-    boxes: [
-      [3, 2],
-      [6, 2],
-      [3, 6],
-      [6, 6]
-    ],
-
-    targets: [
-      [1, 1],
-      [8, 1],
-      [1, 8],
-      [8, 8]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 8
-     ---------------------------------------------------------- */
-
-  {
-    name: "The Trap",
-
-    width: 10,
-    height: 10,
-
-    player: [1, 8],
-
-    boxes: [
-      [3, 2],
-      [4, 3],
-      [5, 4],
-      [6, 5]
-    ],
-
-    targets: [
-      [2, 1],
-      [7, 1],
-      [2, 8],
-      [7, 8]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 9
-     ---------------------------------------------------------- */
-
-  {
-    name: "Traffic",
-
-    width: 11,
-    height: 10,
-
-    player: [1, 8],
-
-    boxes: [
-      [3, 2],
-      [5, 2],
-      [7, 2],
-      [4, 6],
-      [6, 6]
-    ],
-
-    targets: [
-      [2, 1],
-      [4, 1],
-      [6, 1],
-      [8, 1],
-      [5, 8]
-    ]
-  },
-
-
-  /* ----------------------------------------------------------
-     STAGE 10
-     ---------------------------------------------------------- */
-
-  {
-    name: "The Final Push",
-
-    width: 11,
-    height: 11,
-
-    player: [1, 9],
-
-    boxes: [
-      [3, 2],
-      [5, 2],
-      [7, 2],
-      [3, 6],
-      [5, 6],
-      [7, 6]
-    ],
-
-    targets: [
-      [2, 1],
-      [4, 1],
-      [6, 1],
-      [8, 1],
-      [4, 9],
-      [7, 9]
-    ]
-  }
+/*
+   These stages are deliberately much more constrained than
+   the previous version.
+
+   The difficulty comes from:
+
+   - narrow corridors
+   - dead-end pockets
+   - forced box ordering
+   - temporary displacement
+   - bottlenecks
+   - boxes blocking player routes
+   - target access from only one direction
+*/
+
+
+const STAGES = [
+
+/* ============================================================
+   STAGE 1 — THE FIRST TRAP
+   ============================================================ */
+
+{
+  name: "The First Trap",
+  difficulty: "★★★☆☆  HARD",
+
+  map: [
+    "#########",
+    "#   .   #",
+    "# ###X# #",
+    "#  X   .#",
+    "# # ### #",
+    "# .X   X#",
+    "#   P   #",
+    "#########"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 2 — FALSE TARGET
+   ============================================================ */
+
+{
+  name: "False Target",
+  difficulty: "★★★★☆  VERY HARD",
+
+  map: [
+    "##########",
+    "# .      #",
+    "# ###X## #",
+    "#   X    #",
+    "### ###. #",
+    "# X   X  #",
+    "#   P  . #",
+    "##########"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 3 — ONE WAY
+   ============================================================ */
+
+{
+  name: "One Way",
+  difficulty: "★★★★☆  VERY HARD",
+
+  map: [
+    "###########",
+    "# .   #   #",
+    "# ### # X #",
+    "#   X   . #",
+    "# # ##### #",
+    "# # X     #",
+    "# .   P   #",
+    "###########"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 4 — BOTTLENECK
+   ============================================================ */
+
+{
+  name: "Bottleneck",
+  difficulty: "★★★★☆  VERY HARD",
+
+  map: [
+    "###########",
+    "# .   # . #",
+    "# ### X # #",
+    "#   X   # #",
+    "### ###   #",
+    "# X   X   #",
+    "# .   P   #",
+    "###########"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 5 — REVERSE THINKING
+   ============================================================ */
+
+{
+  name: "Reverse Thinking",
+  difficulty: "★★★★★  EXTREME",
+
+  map: [
+    "############",
+    "# .   #   .#",
+    "# ### X ### #".replace(" ", ""),
+    "#   X      #",
+    "### ###### #",
+    "# X     X  #",
+    "# .  P     #",
+    "############"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 6 — THE LOCK
+   ============================================================ */
+
+{
+  name: "The Lock",
+  difficulty: "★★★★★  EXTREME",
+
+  map: [
+    "############",
+    "# .   #   .#",
+    "# ### X ### #".replace(" ", ""),
+    "# X       X#",
+    "# # ##### #",
+    "# #   X   #",
+    "# .   P   #",
+    "############"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 7 — THREE DEPENDENCIES
+   ============================================================ */
+
+{
+  name: "Three Dependencies",
+  difficulty: "★★★★★  EXTREME",
+
+  map: [
+    "#############",
+    "# .   #   . #",
+    "# ### X ### #",
+    "#   X   X   #",
+    "### ##### ###",
+    "# X       X #",
+    "# .   P   . #",
+    "#############"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 8 — DEADLOCK CITY
+   ============================================================ */
+
+{
+  name: "Deadlock City",
+  difficulty: "★★★★★  EXTREME",
+
+  map: [
+    "#############",
+    "# .     # . #",
+    "# ### X # X #",
+    "#   X     X #",
+    "### ### ### #",
+    "# X   X     #",
+    "# .   P   . #",
+    "#############"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 9 — NO WASTED PUSH
+   ============================================================ */
+
+{
+  name: "No Wasted Push",
+  difficulty: "★★★★★  MASTER",
+
+  map: [
+    "##############",
+    "# .    #    .#",
+    "# ###X # X### #".replace(" ", ""),
+    "#   X     X   #",
+    "### ####### ###",
+    "# X         X #",
+    "# .    P    . #",
+    "##############"
+  ]
+},
+
+
+/* ============================================================
+   STAGE 10 — IQ 150
+   ============================================================ */
+
+{
+  name: "The Grandmaster",
+  difficulty: "★★★★★  IQ 150+",
+
+  map: [
+    "###############",
+    "# .   #   #   .#",
+    "# ### X # X ### #".replace(" ", ""),
+    "#   X     X     #",
+    "### ### ### ### #".replace(" ", ""),
+    "# X     X     X #",
+    "# .   P     .   #",
+    "###############"
+  ]
+}
 
 ];
 
@@ -504,98 +505,105 @@ const LEVELS = [
    GAME STATE
    ============================================================ */
 
-let levelIndex = 0;
+let stageIndex = 0;
 
-let player;
+let map = [];
 
-let boxes;
+let width = 0;
 
-let targets;
+let height = 0;
 
-let walls;
+let walls = new Set();
 
-let history;
+let targets = new Set();
+
+let boxes = [];
+
+let player = {
+  x: 0,
+  y: 0
+};
+
+let initialState = null;
+
+let history = [];
+
+let moves = 0;
+
+let pushes = 0;
 
 let solved = false;
 
 
 /* ============================================================
-   UTILITY
+   PARSE STAGE
    ============================================================ */
 
-function key(x, y) {
-  return `${x},${y}`;
-}
+function parseStage(stage) {
 
+  map = stage.map;
 
-/* ============================================================
-   STAGE SELECTOR
-   ============================================================ */
+  height = map.length;
 
-function buildStageSelect() {
-
-  const select =
-    document.getElementById("stageSelect");
-
-  select.innerHTML = "";
-
-  LEVELS.forEach((level, i) => {
-
-    const option =
-      document.createElement("option");
-
-    option.value = i;
-
-    option.textContent =
-      `Stage ${i + 1} — ${level.name}`;
-
-    select.appendChild(option);
-
-  });
-
-  select.value = levelIndex;
-}
-
-
-/* ============================================================
-   LOAD STAGE
-   ============================================================ */
-
-function loadLevel(index) {
-
-  levelIndex = Number(index);
-
-  const level = LEVELS[levelIndex];
+  width = Math.max(
+    ...map.map(row => row.length)
+  );
 
   walls = new Set();
 
   targets = new Set();
 
+  boxes = [];
 
-  /* ----------------------------------------------------------
-     Outer walls
-     ---------------------------------------------------------- */
+  player = {
+    x: 0,
+    y: 0
+  };
 
-  for (
-    let y = 0;
-    y < level.height;
-    y++
-  ) {
 
-    for (
-      let x = 0;
-      x < level.width;
-      x++
-    ) {
+  for (let y = 0; y < height; y++) {
 
-      if (
-        x === 0 ||
-        x === level.width - 1 ||
-        y === 0 ||
-        y === level.height - 1
-      ) {
+    const row =
+      map[y].padEnd(width, "#");
 
-        walls.add(key(x, y));
+
+    for (let x = 0; x < width; x++) {
+
+      const tile = row[x];
+
+      const k = key(x, y);
+
+
+      if (tile === "#") {
+
+        walls.add(k);
+
+      }
+
+
+      else if (tile === ".") {
+
+        targets.add(k);
+
+      }
+
+
+      else if (tile === "X") {
+
+        boxes.push({
+          x,
+          y
+        });
+
+      }
+
+
+      else if (tile === "P") {
+
+        player = {
+          x,
+          y
+        };
 
       }
 
@@ -603,80 +611,19 @@ function loadLevel(index) {
 
   }
 
-
-  /* ----------------------------------------------------------
-     Targets
-     ---------------------------------------------------------- */
-
-  for (const [x, y] of level.targets) {
-
-    targets.add(key(x, y));
-
-  }
-
-
-  /* ----------------------------------------------------------
-     Player
-     ---------------------------------------------------------- */
-
-  player = {
-    x: level.player[0],
-    y: level.player[1]
-  };
-
-
-  /* ----------------------------------------------------------
-     Boxes
-     ---------------------------------------------------------- */
-
-  boxes =
-    level.boxes.map(([x, y]) => ({
-      x,
-      y
-    }));
-
-
-  history = [];
-
-  solved = false;
-
-
-  /* ----------------------------------------------------------
-     UI
-     ---------------------------------------------------------- */
-
-  document.getElementById(
-    "stageSelect"
-  ).value = levelIndex;
-
-  document.getElementById(
-    "status"
-  ).textContent =
-    `Stage ${levelIndex + 1}: ${level.name}`;
-
-  document.getElementById(
-    "nextBtn"
-  ).style.display = "none";
-
-
-  draw();
 }
 
 
 /* ============================================================
-   CHANGE STAGE
+   UTILITIES
    ============================================================ */
 
-function selectStage(index) {
+function key(x, y) {
 
-  loadLevel(index);
+  return `${x},${y}`;
 
 }
 
-
-/* ============================================================
-   FIND BOX
-   ============================================================ */
 
 function boxAt(x, y) {
 
@@ -689,21 +636,23 @@ function boxAt(x, y) {
 }
 
 
-/* ============================================================
-   CHECK WALKABLE
-   ============================================================ */
+function isWall(x, y) {
 
-function walkable(x, y) {
+  return walls.has(
+    key(x, y)
+  );
 
-  const level =
-    LEVELS[levelIndex];
+}
+
+
+function isFree(x, y) {
 
   return (
     x >= 0 &&
-    x < level.width &&
+    x < width &&
     y >= 0 &&
-    y < level.height &&
-    !walls.has(key(x, y))
+    y < height &&
+    !isWall(x, y)
   );
 
 }
@@ -713,14 +662,54 @@ function walkable(x, y) {
    SAVE STATE
    ============================================================ */
 
-function save() {
+function saveState() {
 
-  history.push(
-    JSON.stringify({
-      player,
-      boxes
-    })
-  );
+  history.push({
+    player: {
+      x: player.x,
+      y: player.y
+    },
+
+    boxes: boxes.map(b => ({
+      x: b.x,
+      y: b.y
+    })),
+
+    moves,
+    pushes
+  });
+
+}
+
+
+/* ============================================================
+   RESTORE STATE
+   ============================================================ */
+
+function restoreState(state) {
+
+  player = {
+    x: state.player.x,
+    y: state.player.y
+  };
+
+  boxes =
+    state.boxes.map(b => ({
+      x: b.x,
+      y: b.y
+    }));
+
+  moves = state.moves;
+
+  pushes = state.pushes;
+
+  solved = false;
+
+  document.getElementById(
+    "nextButton"
+  ).style.display = "none";
+
+  draw();
 
 }
 
@@ -735,36 +724,15 @@ function undo() {
     return;
   }
 
-  const state =
-    JSON.parse(
-      history.pop()
-    );
-
-  player = state.player;
-
-  boxes = state.boxes;
-
-  solved = false;
-
-
-  document.getElementById(
-    "status"
-  ).textContent =
-    `Stage ${levelIndex + 1}: ${LEVELS[levelIndex].name}`;
-
-
-  document.getElementById(
-    "nextBtn"
-  ).style.display = "none";
-
-
-  draw();
+  restoreState(
+    history.pop()
+  );
 
 }
 
 
 /* ============================================================
-   MOVE PLAYER
+   MOVE
    ============================================================ */
 
 function move(dx, dy) {
@@ -781,40 +749,38 @@ function move(dx, dy) {
     player.y + dy;
 
 
-  /* ----------------------------------------------------------
-     Can't walk into wall
-     ---------------------------------------------------------- */
-
-  if (!walkable(nx, ny)) {
+  if (!isFree(nx, ny)) {
     return;
   }
 
 
-  const i =
+  const box =
     boxAt(nx, ny);
 
 
   /* ----------------------------------------------------------
-     Normal movement
+     NORMAL WALK
      ---------------------------------------------------------- */
 
-  if (i < 0) {
+  if (box === -1) {
 
-    save();
+    saveState();
 
-    player = {
-      x: nx,
-      y: ny
-    };
+    player.x = nx;
+
+    player.y = ny;
+
+    moves++;
 
     draw();
 
     return;
+
   }
 
 
   /* ----------------------------------------------------------
-     Push box
+     PUSH
      ---------------------------------------------------------- */
 
   const bx =
@@ -824,31 +790,32 @@ function move(dx, dy) {
     ny + dy;
 
 
-  /* Can't push outside board */
-  if (!walkable(bx, by)) {
+  if (!isFree(bx, by)) {
     return;
   }
 
 
-  /* Can't push two boxes */
-  if (boxAt(bx, by) >= 0) {
+  if (boxAt(bx, by) !== -1) {
     return;
   }
 
 
-  save();
+  saveState();
 
 
-  boxes[i] = {
-    x: bx,
-    y: by
-  };
+  boxes[box].x = bx;
+
+  boxes[box].y = by;
 
 
-  player = {
-    x: nx,
-    y: ny
-  };
+  player.x = nx;
+
+  player.y = ny;
+
+
+  moves++;
+
+  pushes++;
 
 
   draw();
@@ -859,64 +826,68 @@ function move(dx, dy) {
 
 
 /* ============================================================
-   CHECK WIN
+   WIN CHECK
    ============================================================ */
 
 function checkSolved() {
 
-  if (
-    boxes.length > 0 &&
+  if (!boxes.length) {
+    return;
+  }
+
+
+  const win =
     boxes.every(
-      b =>
+      box =>
         targets.has(
-          key(b.x, b.y)
+          key(box.x, box.y)
         )
-    )
+    );
+
+
+  if (!win) {
+    return;
+  }
+
+
+  solved = true;
+
+
+  let message =
+    `🎉 Stage ${stageIndex + 1} Complete!`;
+
+
+  if (
+    pushes <=
+    optimalPushEstimate()
   ) {
 
-    solved = true;
+    message +=
+      "  🔥 Excellent solution!";
+
+  }
 
 
-    if (
-      levelIndex <
-      LEVELS.length - 1
-    ) {
+  document.getElementById(
+    "status"
+  ).textContent = message;
 
-      document.getElementById(
-        "status"
-      ).textContent =
-        `🎉 Stage ${levelIndex + 1} Complete!`;
 
-      document.getElementById(
-        "nextBtn"
-      ).style.display =
-        "inline-block";
+  document.getElementById(
+    "nextButton"
+  ).style.display =
+    "inline-block";
 
-      document.getElementById(
-        "nextBtn"
-      ).textContent =
-        "Next Stage →";
 
-    }
+  if (
+    stageIndex ===
+    STAGES.length - 1
+  ) {
 
-    else {
-
-      document.getElementById(
-        "status"
-      ).textContent =
-        "🏆 Congratulations! You completed all 10 stages!";
-
-      document.getElementById(
-        "nextBtn"
-      ).style.display =
-        "inline-block";
-
-      document.getElementById(
-        "nextBtn"
-      ).textContent =
-        "Play Again";
-
-    }
+    document.getElementById(
+      "nextButton"
+    ).textContent =
+      "🏆 Play Again";
 
   }
 
@@ -924,25 +895,126 @@ function checkSolved() {
 
 
 /* ============================================================
-   NEXT STAGE
+   PUSH ESTIMATE
+
+   This is intentionally not presented as a mathematically
+   proven minimum. It is a benchmark for scoring.
+   ============================================================ */
+
+function optimalPushEstimate() {
+
+  const estimates = [
+    22,
+    30,
+    38,
+    46,
+    58,
+    70,
+    82,
+    95,
+    115,
+    140
+  ];
+
+  return estimates[stageIndex];
+
+}
+
+
+/* ============================================================
+   LOAD STAGE
+   ============================================================ */
+
+function loadStage(index) {
+
+  stageIndex = index;
+
+  parseStage(
+    STAGES[stageIndex]
+  );
+
+
+  moves = 0;
+
+  pushes = 0;
+
+  history = [];
+
+  solved = false;
+
+
+  initialState = {
+    player: {
+      x: player.x,
+      y: player.y
+    },
+
+    boxes: boxes.map(b => ({
+      x: b.x,
+      y: b.y
+    }))
+  };
+
+
+  document.getElementById(
+    "stageSelect"
+  ).value = stageIndex;
+
+
+  document.getElementById(
+    "status"
+  ).textContent =
+    `Stage ${stageIndex + 1}: ${STAGES[stageIndex].name}`;
+
+
+  document.getElementById(
+    "difficulty"
+  ).textContent =
+    STAGES[stageIndex].difficulty;
+
+
+  document.getElementById(
+    "nextButton"
+  ).style.display =
+    "none";
+
+
+  draw();
+
+}
+
+
+/* ============================================================
+   RESTART
+   ============================================================ */
+
+function restartStage() {
+
+  loadStage(stageIndex);
+
+}
+
+
+/* ============================================================
+   NEXT
    ============================================================ */
 
 function nextStage() {
 
   if (
-    levelIndex <
-    LEVELS.length - 1
+    stageIndex <
+    STAGES.length - 1
   ) {
 
-    loadLevel(
-      levelIndex + 1
+    loadStage(
+      stageIndex + 1
     );
 
   }
 
   else {
 
-    loadLevel(0);
+    loadStage(0);
 
   }
 
@@ -950,20 +1022,7 @@ function nextStage() {
 
 
 /* ============================================================
-   RESTART CURRENT STAGE
-   ============================================================ */
-
-function reset() {
-
-  loadLevel(
-    levelIndex
-  );
-
-}
-
-
-/* ============================================================
-   DRAW BOARD
+   DRAW
    ============================================================ */
 
 function draw() {
@@ -973,56 +1032,53 @@ function draw() {
       "game"
     );
 
-  const level =
-    LEVELS[levelIndex];
-
 
   game.innerHTML = "";
 
 
-  /* Dynamic board size */
-
   game.style.gridTemplateColumns =
-    `repeat(${level.width}, var(--s))`;
+    `repeat(${width}, var(--s))`;
+
 
   game.style.gridTemplateRows =
-    `repeat(${level.height}, var(--s))`;
+    `repeat(${height}, var(--s))`;
 
-
-  /* ----------------------------------------------------------
-     Create cells
-     ---------------------------------------------------------- */
 
   for (
     let y = 0;
-    y < level.height;
+    y < height;
     y++
   ) {
 
     for (
       let x = 0;
-      x < level.width;
+      x < width;
       x++
     ) {
 
-      const c =
-        document.createElement("div");
+      const cell =
+        document.createElement(
+          "div"
+        );
 
-      c.className =
+
+      cell.className =
         "cell";
 
 
+      const k =
+        key(x, y);
+
+
       /* ------------------------------------------------------
-         Wall
+         WALL
          ------------------------------------------------------ */
 
       if (
-        walls.has(
-          key(x, y)
-        )
+        walls.has(k)
       ) {
 
-        c.classList.add(
+        cell.classList.add(
           "wall"
         );
 
@@ -1030,96 +1086,70 @@ function draw() {
 
 
       /* ------------------------------------------------------
-         Floor
+         FLOOR
          ------------------------------------------------------ */
 
       else {
 
-        c.classList.add(
+        cell.classList.add(
           "floor"
         );
 
 
-        /* Center column */
+        /* Target */
 
         if (
-          x ===
-          Math.floor(
-            level.width / 2
-          )
+          targets.has(k)
         ) {
 
-          c.classList.add(
-            "center"
-          );
-
-        }
-
-
-        /* ----------------------------------------------------
-           Target
-           ---------------------------------------------------- */
-
-        if (
-          targets.has(
-            key(x, y)
-          )
-        ) {
-
-          c.classList.add(
+          cell.classList.add(
             "target"
           );
 
-          c.textContent =
+          cell.textContent =
             "○";
 
         }
 
 
-        /* ----------------------------------------------------
-           Box
-           ---------------------------------------------------- */
+        /* Box */
 
         const bi =
           boxAt(x, y);
 
 
-        if (bi >= 0) {
+        if (bi !== -1) {
 
-          c.classList.add(
+          cell.classList.add(
             "box"
           );
 
 
           if (
-            targets.has(
-              key(x, y)
-            )
+            targets.has(k)
           ) {
 
-            c.classList.add(
+            cell.classList.add(
               "done"
             );
 
           }
 
 
-          c.textContent =
+          cell.textContent =
             "×";
 
         }
 
 
-        /* ----------------------------------------------------
-           Player
-           ---------------------------------------------------- */
+        /* Player */
 
         if (
           player.x === x &&
           player.y === y
         ) {
 
-          c.classList.add(
+          cell.classList.add(
             "player"
           );
 
@@ -1128,33 +1158,85 @@ function draw() {
       }
 
 
-      game.appendChild(c);
+      game.appendChild(
+        cell
+      );
 
     }
 
   }
 
+
+  document.getElementById(
+    "moves"
+  ).textContent =
+    moves;
+
+
+  document.getElementById(
+    "pushes"
+  ).textContent =
+    pushes;
+
 }
 
 
 /* ============================================================
-   KEYBOARD CONTROLS
+   BUILD STAGE SELECT
+   ============================================================ */
+
+function buildStageSelect() {
+
+  const select =
+    document.getElementById(
+      "stageSelect"
+    );
+
+
+  STAGES.forEach(
+    (stage, index) => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        index;
+
+
+      option.textContent =
+        `Stage ${index + 1} — ${stage.name}`;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   KEYBOARD
    ============================================================ */
 
 document.addEventListener(
   "keydown",
-  e => {
+  event => {
 
-    const k =
-      e.key.toLowerCase();
+    const keyName =
+      event.key.toLowerCase();
 
 
-    const controls = [
+    const controlledKeys = [
       "arrowup",
       "arrowdown",
       "arrowleft",
       "arrowright",
-      " ",
       "w",
       "a",
       "s",
@@ -1165,37 +1247,37 @@ document.addEventListener(
 
 
     if (
-      controls.includes(k)
+      controlledKeys.includes(
+        keyName
+      )
     ) {
 
-      e.preventDefault();
+      event.preventDefault();
 
     }
 
 
-    /* Restart */
+    if (
+      keyName === "r"
+    ) {
 
-    if (k === "r") {
-
-      reset();
+      restartStage();
 
     }
 
 
-    /* Undo */
-
-    else if (k === "z") {
+    else if (
+      keyName === "z"
+    ) {
 
       undo();
 
     }
 
 
-    /* Up */
-
     else if (
-      k === "arrowup" ||
-      k === "w"
+      keyName === "arrowup" ||
+      keyName === "w"
     ) {
 
       move(0, -1);
@@ -1203,11 +1285,9 @@ document.addEventListener(
     }
 
 
-    /* Down */
-
     else if (
-      k === "arrowdown" ||
-      k === "s"
+      keyName === "arrowdown" ||
+      keyName === "s"
     ) {
 
       move(0, 1);
@@ -1215,11 +1295,9 @@ document.addEventListener(
     }
 
 
-    /* Left */
-
     else if (
-      k === "arrowleft" ||
-      k === "a"
+      keyName === "arrowleft" ||
+      keyName === "a"
     ) {
 
       move(-1, 0);
@@ -1227,11 +1305,9 @@ document.addEventListener(
     }
 
 
-    /* Right */
-
     else if (
-      k === "arrowright" ||
-      k === "d"
+      keyName === "arrowright" ||
+      keyName === "d"
     ) {
 
       move(1, 0);
@@ -1243,12 +1319,12 @@ document.addEventListener(
 
 
 /* ============================================================
-   START GAME
+   START
    ============================================================ */
 
 buildStageSelect();
 
-loadLevel(0);
+loadStage(0);
 
 </script>
 

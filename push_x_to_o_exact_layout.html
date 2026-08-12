@@ -1,150 +1,592 @@
 ```html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Push X to O</title>
+
+<style>
+  :root {
+    --s: 60px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: #1d1d1d;
+    font-family: system-ui, sans-serif;
+    color: #eee;
+  }
+
+  .wrap {
+    text-align: center;
+    max-width: 95vw;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+
+  #game {
+    display: grid;
+    gap: 2px;
+    padding: 3px;
+    background: #111;
+    border-radius: 3px;
+    box-shadow: 0 8px 30px #0008;
+    margin: 0 auto;
+    width: max-content;
+  }
+
+  .cell {
+    width: var(--s);
+    height: var(--s);
+    position: relative;
+    display: grid;
+    place-items: center;
+    font-size: 38px;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .wall {
+    background: linear-gradient(
+      135deg,
+      #9b9b9b,
+      #b3b3b3
+    );
+
+    border: 2px solid #737373;
+
+    box-shadow:
+      inset 1px 1px #d0d0d0,
+      inset -2px -2px #666;
+  }
+
+  .floor {
+    background: #555;
+  }
+
+  .center {
+    background: #f0c63f;
+  }
+
+  .target {
+    color: #aaa;
+    text-shadow: 0 1px 1px #333;
+  }
+
+  .center.target {
+    color: #d9a927;
+  }
+
+  .box {
+    color: #b58a14;
+    font-size: 42px;
+    font-weight: 300;
+    text-shadow: 0 1px 0 #f8df73;
+  }
+
+  .box.done {
+    color: #9c7610;
+  }
+
+  .player::before {
+    content: "";
+
+    width: 12px;
+    height: 28px;
+
+    border-radius: 50%;
+
+    background: #222;
+
+    box-shadow:
+      2px 0 0 #eee,
+      5px 0 0 #111,
+      0 0 4px #000;
+
+    transform: rotate(-18deg);
+  }
+
+  #status {
+    min-height: 28px;
+    margin-top: 10px;
+    font-weight: 700;
+  }
+
+  button {
+    border: 0;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 3px;
+  }
+
+  button:hover {
+    opacity: 0.85;
+  }
+
+  .controls {
+    margin-top: 8px;
+    color: #aaa;
+    font-size: 13px;
+  }
+
+  #stageSelect {
+    margin: 4px 0 8px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 700px) {
+    :root {
+      --s: 42px;
+    }
+
+    .cell {
+      font-size: 28px;
+    }
+
+    .box {
+      font-size: 32px;
+    }
+  }
+</style>
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+  <h1>Push X to O</h1>
+
+  <!-- Stage selector -->
+  <select id="stageSelect"
+          onchange="selectStage(this.value)">
+  </select>
+
+  <!-- Game board -->
+  <div id="game"></div>
+
+  <!-- Status -->
+  <div id="status"></div>
+
+  <!-- Controls -->
+  <button onclick="reset()">Restart</button>
+
+  <button id="nextBtn"
+          onclick="nextStage()"
+          style="display:none;">
+    Next Stage →
+  </button>
+
+  <div class="controls">
+    Arrow keys / WASD · R = restart · Z = undo
+  </div>
+
+</div>
+
+
 <script>
-// ============================================================
-// PUSH X TO O — 10 CHALLENGE STAGES
-// ============================================================
+
+/* ============================================================
+   PUSH X TO O
+   10 STAGES
+   ============================================================ */
 
 const LEVELS = [
 
-  // Stage 1 — Intro
+  /* ----------------------------------------------------------
+     STAGE 1
+     ---------------------------------------------------------- */
+
   {
     name: "First Push",
-    width: 5, height: 8,
-    player: [1,3],
-    boxes: [[2,2],[2,3],[2,4],[2,5]],
-    targets: [[1,1],[2,1],[3,1],[1,6],[2,6],[3,6]]
+
+    width: 5,
+    height: 8,
+
+    player: [1, 3],
+
+    boxes: [
+      [2, 2],
+      [2, 3],
+      [2, 4],
+      [2, 5]
+    ],
+
+    targets: [
+      [1, 1],
+      [2, 1],
+      [3, 1],
+      [1, 6],
+      [2, 6],
+      [3, 6]
+    ]
   },
 
-  // Stage 2 — Offset
+
+  /* ----------------------------------------------------------
+     STAGE 2
+     ---------------------------------------------------------- */
+
   {
     name: "Offset",
-    width: 7, height: 8,
-    player: [1,6],
-    boxes: [[2,2],[3,3],[3,4],[4,5]],
-    targets: [[2,1],[3,1],[4,1],[2,6],[3,6],[4,6]]
+
+    width: 7,
+    height: 8,
+
+    player: [1, 6],
+
+    boxes: [
+      [2, 2],
+      [3, 3],
+      [3, 4],
+      [4, 5]
+    ],
+
+    targets: [
+      [2, 1],
+      [3, 1],
+      [4, 1],
+      [2, 6],
+      [3, 6],
+      [4, 6]
+    ]
   },
 
-  // Stage 3 — Corners
+
+  /* ----------------------------------------------------------
+     STAGE 3
+     ---------------------------------------------------------- */
+
   {
     name: "Corners",
-    width: 8, height: 8,
-    player: [1,6],
-    boxes: [[2,2],[3,3],[4,3],[5,4]],
-    targets: [[2,1],[4,1],[5,6],[6,6]]
+
+    width: 8,
+    height: 8,
+
+    player: [1, 6],
+
+    boxes: [
+      [2, 2],
+      [3, 3],
+      [4, 3],
+      [5, 4]
+    ],
+
+    targets: [
+      [2, 1],
+      [4, 1],
+      [5, 6],
+      [6, 6]
+    ]
   },
 
-  // Stage 4 — Cross
+
+  /* ----------------------------------------------------------
+     STAGE 4
+     ---------------------------------------------------------- */
+
   {
     name: "Crossroads",
-    width: 9, height: 9,
-    player: [1,7],
-    boxes: [[3,2],[5,2],[3,5],[5,5]],
-    targets: [[2,1],[6,1],[2,7],[6,7]]
+
+    width: 9,
+    height: 9,
+
+    player: [1, 7],
+
+    boxes: [
+      [3, 2],
+      [5, 2],
+      [3, 5],
+      [5, 5]
+    ],
+
+    targets: [
+      [2, 1],
+      [6, 1],
+      [2, 7],
+      [6, 7]
+    ]
   },
 
-  // Stage 5 — Narrow
+
+  /* ----------------------------------------------------------
+     STAGE 5
+     ---------------------------------------------------------- */
+
   {
     name: "Narrow Passage",
-    width: 9, height: 9,
-    player: [1,7],
-    boxes: [[3,2],[4,3],[5,4],[4,5]],
-    targets: [[2,1],[6,1],[2,7],[6,7]]
+
+    width: 9,
+    height: 9,
+
+    player: [1, 7],
+
+    boxes: [
+      [3, 2],
+      [4, 3],
+      [5, 4],
+      [4, 5]
+    ],
+
+    targets: [
+      [2, 1],
+      [6, 1],
+      [2, 7],
+      [6, 7]
+    ]
   },
 
-  // Stage 6 — Spiral
+
+  /* ----------------------------------------------------------
+     STAGE 6
+     ---------------------------------------------------------- */
+
   {
     name: "Spiral",
-    width: 10, height: 10,
-    player: [1,8],
-    boxes: [[3,2],[6,2],[3,6],[6,6]],
-    targets: [[2,1],[7,1],[2,8],[7,8]]
+
+    width: 10,
+    height: 10,
+
+    player: [1, 8],
+
+    boxes: [
+      [3, 2],
+      [6, 2],
+      [3, 6],
+      [6, 6]
+    ],
+
+    targets: [
+      [2, 1],
+      [7, 1],
+      [2, 8],
+      [7, 8]
+    ]
   },
 
-  // Stage 7 — Four Corners
+
+  /* ----------------------------------------------------------
+     STAGE 7
+     ---------------------------------------------------------- */
+
   {
     name: "Four Corners",
-    width: 10, height: 10,
-    player: [1,8],
-    boxes: [[3,2],[6,2],[3,6],[6,6]],
-    targets: [[1,1],[8,1],[1,8],[8,8]]
+
+    width: 10,
+    height: 10,
+
+    player: [1, 8],
+
+    boxes: [
+      [3, 2],
+      [6, 2],
+      [3, 6],
+      [6, 6]
+    ],
+
+    targets: [
+      [1, 1],
+      [8, 1],
+      [1, 8],
+      [8, 8]
+    ]
   },
 
-  // Stage 8 — The Trap
+
+  /* ----------------------------------------------------------
+     STAGE 8
+     ---------------------------------------------------------- */
+
   {
     name: "The Trap",
-    width: 10, height: 10,
-    player: [1,8],
-    boxes: [[3,2],[4,3],[5,4],[6,5]],
-    targets: [[2,1],[7,1],[2,8],[7,8]]
+
+    width: 10,
+    height: 10,
+
+    player: [1, 8],
+
+    boxes: [
+      [3, 2],
+      [4, 3],
+      [5, 4],
+      [6, 5]
+    ],
+
+    targets: [
+      [2, 1],
+      [7, 1],
+      [2, 8],
+      [7, 8]
+    ]
   },
 
-  // Stage 9 — Traffic
+
+  /* ----------------------------------------------------------
+     STAGE 9
+     ---------------------------------------------------------- */
+
   {
     name: "Traffic",
-    width: 11, height: 10,
-    player: [1,8],
-    boxes: [[3,2],[5,2],[7,2],[4,6],[6,6]],
-    targets: [[2,1],[4,1],[6,1],[8,1],[5,8]]
+
+    width: 11,
+    height: 10,
+
+    player: [1, 8],
+
+    boxes: [
+      [3, 2],
+      [5, 2],
+      [7, 2],
+      [4, 6],
+      [6, 6]
+    ],
+
+    targets: [
+      [2, 1],
+      [4, 1],
+      [6, 1],
+      [8, 1],
+      [5, 8]
+    ]
   },
 
-  // Stage 10 — Final Challenge
+
+  /* ----------------------------------------------------------
+     STAGE 10
+     ---------------------------------------------------------- */
+
   {
     name: "The Final Push",
-    width: 11, height: 11,
-    player: [1,9],
+
+    width: 11,
+    height: 11,
+
+    player: [1, 9],
+
     boxes: [
-      [3,2],
-      [5,2],
-      [7,2],
-      [3,6],
-      [5,6],
-      [7,6]
+      [3, 2],
+      [5, 2],
+      [7, 2],
+      [3, 6],
+      [5, 6],
+      [7, 6]
     ],
+
     targets: [
-      [2,1],
-      [4,1],
-      [6,1],
-      [8,1],
-      [4,9],
-      [7,9]
+      [2, 1],
+      [4, 1],
+      [6, 1],
+      [8, 1],
+      [4, 9],
+      [7, 9]
     ]
   }
+
 ];
 
+
+/* ============================================================
+   GAME STATE
+   ============================================================ */
+
 let levelIndex = 0;
+
 let player;
+
 let boxes;
+
 let targets;
+
 let walls;
+
 let history;
+
 let solved = false;
 
 
-// ------------------------------------------------------------
-// Utility
-// ------------------------------------------------------------
+/* ============================================================
+   UTILITY
+   ============================================================ */
 
 function key(x, y) {
   return `${x},${y}`;
 }
 
 
-// ------------------------------------------------------------
-// Load Level
-// ------------------------------------------------------------
+/* ============================================================
+   STAGE SELECTOR
+   ============================================================ */
+
+function buildStageSelect() {
+
+  const select =
+    document.getElementById("stageSelect");
+
+  select.innerHTML = "";
+
+  LEVELS.forEach((level, i) => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = i;
+
+    option.textContent =
+      `Stage ${i + 1} — ${level.name}`;
+
+    select.appendChild(option);
+
+  });
+
+  select.value = levelIndex;
+}
+
+
+/* ============================================================
+   LOAD STAGE
+   ============================================================ */
 
 function loadLevel(index) {
 
-  levelIndex = index;
+  levelIndex = Number(index);
 
   const level = LEVELS[levelIndex];
 
   walls = new Set();
+
   targets = new Set();
 
-  // Outer boundary
-  for (let y = 0; y < level.height; y++) {
-    for (let x = 0; x < level.width; x++) {
+
+  /* ----------------------------------------------------------
+     Outer walls
+     ---------------------------------------------------------- */
+
+  for (
+    let y = 0;
+    y < level.height;
+    y++
+  ) {
+
+    for (
+      let x = 0;
+      x < level.width;
+      x++
+    ) {
 
       if (
         x === 0 ||
@@ -152,50 +594,109 @@ function loadLevel(index) {
         y === 0 ||
         y === level.height - 1
       ) {
+
         walls.add(key(x, y));
+
       }
+
     }
+
   }
 
-  // Targets
+
+  /* ----------------------------------------------------------
+     Targets
+     ---------------------------------------------------------- */
+
   for (const [x, y] of level.targets) {
+
     targets.add(key(x, y));
+
   }
+
+
+  /* ----------------------------------------------------------
+     Player
+     ---------------------------------------------------------- */
 
   player = {
     x: level.player[0],
     y: level.player[1]
   };
 
-  boxes = level.boxes.map(([x, y]) => ({
-    x,
-    y
-  }));
+
+  /* ----------------------------------------------------------
+     Boxes
+     ---------------------------------------------------------- */
+
+  boxes =
+    level.boxes.map(([x, y]) => ({
+      x,
+      y
+    }));
+
 
   history = [];
+
   solved = false;
 
-  document.getElementById("status").textContent =
+
+  /* ----------------------------------------------------------
+     UI
+     ---------------------------------------------------------- */
+
+  document.getElementById(
+    "stageSelect"
+  ).value = levelIndex;
+
+  document.getElementById(
+    "status"
+  ).textContent =
     `Stage ${levelIndex + 1}: ${level.name}`;
+
+  document.getElementById(
+    "nextBtn"
+  ).style.display = "none";
+
 
   draw();
 }
 
 
-// ------------------------------------------------------------
-// Box / Movement
-// ------------------------------------------------------------
+/* ============================================================
+   CHANGE STAGE
+   ============================================================ */
 
-function boxAt(x, y) {
-  return boxes.findIndex(
-    b => b.x === x && b.y === y
-  );
+function selectStage(index) {
+
+  loadLevel(index);
+
 }
 
 
+/* ============================================================
+   FIND BOX
+   ============================================================ */
+
+function boxAt(x, y) {
+
+  return boxes.findIndex(
+    b =>
+      b.x === x &&
+      b.y === y
+  );
+
+}
+
+
+/* ============================================================
+   CHECK WALKABLE
+   ============================================================ */
+
 function walkable(x, y) {
 
-  const level = LEVELS[levelIndex];
+  const level =
+    LEVELS[levelIndex];
 
   return (
     x >= 0 &&
@@ -204,8 +705,13 @@ function walkable(x, y) {
     y < level.height &&
     !walls.has(key(x, y))
   );
+
 }
 
+
+/* ============================================================
+   SAVE STATE
+   ============================================================ */
 
 function save() {
 
@@ -215,41 +721,82 @@ function save() {
       boxes
     })
   );
+
 }
 
 
+/* ============================================================
+   UNDO
+   ============================================================ */
+
 function undo() {
 
-  if (!history.length) return;
+  if (!history.length) {
+    return;
+  }
 
-  const state = JSON.parse(history.pop());
+  const state =
+    JSON.parse(
+      history.pop()
+    );
 
   player = state.player;
+
   boxes = state.boxes;
 
   solved = false;
 
-  document.getElementById("status").textContent =
+
+  document.getElementById(
+    "status"
+  ).textContent =
     `Stage ${levelIndex + 1}: ${LEVELS[levelIndex].name}`;
 
+
+  document.getElementById(
+    "nextBtn"
+  ).style.display = "none";
+
+
   draw();
+
 }
 
 
+/* ============================================================
+   MOVE PLAYER
+   ============================================================ */
+
 function move(dx, dy) {
 
-  if (solved) return;
+  if (solved) {
+    return;
+  }
 
-  const nx = player.x + dx;
-  const ny = player.y + dy;
 
-  if (!walkable(nx, ny)) return;
+  const nx =
+    player.x + dx;
 
-  const i = boxAt(nx, ny);
+  const ny =
+    player.y + dy;
 
-  // ----------------------------------------------------------
-  // Normal walking
-  // ----------------------------------------------------------
+
+  /* ----------------------------------------------------------
+     Can't walk into wall
+     ---------------------------------------------------------- */
+
+  if (!walkable(nx, ny)) {
+    return;
+  }
+
+
+  const i =
+    boxAt(nx, ny);
+
+
+  /* ----------------------------------------------------------
+     Normal movement
+     ---------------------------------------------------------- */
 
   if (i < 0) {
 
@@ -261,112 +808,179 @@ function move(dx, dy) {
     };
 
     draw();
+
     return;
   }
 
 
-  // ----------------------------------------------------------
-  // Push box
-  // ----------------------------------------------------------
+  /* ----------------------------------------------------------
+     Push box
+     ---------------------------------------------------------- */
 
-  const bx = nx + dx;
-  const by = ny + dy;
+  const bx =
+    nx + dx;
 
-  if (!walkable(bx, by)) return;
+  const by =
+    ny + dy;
 
-  if (boxAt(bx, by) >= 0) return;
+
+  /* Can't push outside board */
+  if (!walkable(bx, by)) {
+    return;
+  }
+
+
+  /* Can't push two boxes */
+  if (boxAt(bx, by) >= 0) {
+    return;
+  }
+
 
   save();
+
 
   boxes[i] = {
     x: bx,
     y: by
   };
 
+
   player = {
     x: nx,
     y: ny
   };
 
+
   draw();
 
   checkSolved();
+
 }
 
 
-// ------------------------------------------------------------
-// Win condition
-// ------------------------------------------------------------
+/* ============================================================
+   CHECK WIN
+   ============================================================ */
 
 function checkSolved() {
 
   if (
     boxes.length > 0 &&
     boxes.every(
-      b => targets.has(key(b.x, b.y))
+      b =>
+        targets.has(
+          key(b.x, b.y)
+        )
     )
   ) {
 
     solved = true;
 
-    document.getElementById("status").textContent =
-      `🎉 Stage ${levelIndex + 1} Complete!`;
 
-    // Show next-stage button
-    const next = document.getElementById("nextBtn");
+    if (
+      levelIndex <
+      LEVELS.length - 1
+    ) {
 
-    if (levelIndex < LEVELS.length - 1) {
-      next.style.display = "inline-block";
-      next.textContent =
-        `Next Stage →`;
-    } else {
-      next.style.display = "inline-block";
-      next.textContent =
-        `🏆 Play Again`;
+      document.getElementById(
+        "status"
+      ).textContent =
+        `🎉 Stage ${levelIndex + 1} Complete!`;
+
+      document.getElementById(
+        "nextBtn"
+      ).style.display =
+        "inline-block";
+
+      document.getElementById(
+        "nextBtn"
+      ).textContent =
+        "Next Stage →";
+
     }
+
+    else {
+
+      document.getElementById(
+        "status"
+      ).textContent =
+        "🏆 Congratulations! You completed all 10 stages!";
+
+      document.getElementById(
+        "nextBtn"
+      ).style.display =
+        "inline-block";
+
+      document.getElementById(
+        "nextBtn"
+      ).textContent =
+        "Play Again";
+
+    }
+
   }
+
 }
 
 
-// ------------------------------------------------------------
-// Next Stage
-// ------------------------------------------------------------
+/* ============================================================
+   NEXT STAGE
+   ============================================================ */
 
 function nextStage() {
 
-  if (levelIndex < LEVELS.length - 1) {
-    loadLevel(levelIndex + 1);
-  } else {
-    loadLevel(0);
+  if (
+    levelIndex <
+    LEVELS.length - 1
+  ) {
+
+    loadLevel(
+      levelIndex + 1
+    );
+
   }
 
-  document.getElementById("nextBtn").style.display = "none";
+  else {
+
+    loadLevel(0);
+
+  }
+
 }
 
 
-// ------------------------------------------------------------
-// Restart
-// ------------------------------------------------------------
+/* ============================================================
+   RESTART CURRENT STAGE
+   ============================================================ */
 
 function reset() {
 
-  loadLevel(levelIndex);
+  loadLevel(
+    levelIndex
+  );
 
-  document.getElementById("nextBtn").style.display =
-    "none";
 }
 
 
-// ------------------------------------------------------------
-// Draw board
-// ------------------------------------------------------------
+/* ============================================================
+   DRAW BOARD
+   ============================================================ */
 
 function draw() {
 
-  const game = document.getElementById("game");
-  const level = LEVELS[levelIndex];
+  const game =
+    document.getElementById(
+      "game"
+    );
+
+  const level =
+    LEVELS[levelIndex];
+
 
   game.innerHTML = "";
+
+
+  /* Dynamic board size */
 
   game.style.gridTemplateColumns =
     `repeat(${level.width}, var(--s))`;
@@ -374,80 +988,168 @@ function draw() {
   game.style.gridTemplateRows =
     `repeat(${level.height}, var(--s))`;
 
-  for (let y = 0; y < level.height; y++) {
 
-    for (let x = 0; x < level.width; x++) {
+  /* ----------------------------------------------------------
+     Create cells
+     ---------------------------------------------------------- */
 
-      const c = document.createElement("div");
+  for (
+    let y = 0;
+    y < level.height;
+    y++
+  ) {
 
-      c.className = "cell";
+    for (
+      let x = 0;
+      x < level.width;
+      x++
+    ) {
+
+      const c =
+        document.createElement("div");
+
+      c.className =
+        "cell";
 
 
-      // Wall
-      if (walls.has(key(x, y))) {
+      /* ------------------------------------------------------
+         Wall
+         ------------------------------------------------------ */
 
-        c.classList.add("wall");
+      if (
+        walls.has(
+          key(x, y)
+        )
+      ) {
 
-      } else {
+        c.classList.add(
+          "wall"
+        );
 
-        c.classList.add("floor");
+      }
 
 
-        // Center line
-        if (x === Math.floor(level.width / 2)) {
-          c.classList.add("center");
+      /* ------------------------------------------------------
+         Floor
+         ------------------------------------------------------ */
+
+      else {
+
+        c.classList.add(
+          "floor"
+        );
+
+
+        /* Center column */
+
+        if (
+          x ===
+          Math.floor(
+            level.width / 2
+          )
+        ) {
+
+          c.classList.add(
+            "center"
+          );
+
         }
 
 
-        // Target
-        if (targets.has(key(x, y))) {
+        /* ----------------------------------------------------
+           Target
+           ---------------------------------------------------- */
 
-          c.classList.add("target");
-          c.textContent = "○";
+        if (
+          targets.has(
+            key(x, y)
+          )
+        ) {
+
+          c.classList.add(
+            "target"
+          );
+
+          c.textContent =
+            "○";
+
         }
 
 
-        // Box
-        const bi = boxAt(x, y);
+        /* ----------------------------------------------------
+           Box
+           ---------------------------------------------------- */
+
+        const bi =
+          boxAt(x, y);
+
 
         if (bi >= 0) {
 
-          c.classList.add("box");
+          c.classList.add(
+            "box"
+          );
 
-          if (targets.has(key(x, y))) {
-            c.classList.add("done");
+
+          if (
+            targets.has(
+              key(x, y)
+            )
+          ) {
+
+            c.classList.add(
+              "done"
+            );
+
           }
 
-          c.textContent = "×";
+
+          c.textContent =
+            "×";
+
         }
 
 
-        // Player
+        /* ----------------------------------------------------
+           Player
+           ---------------------------------------------------- */
+
         if (
           player.x === x &&
           player.y === y
         ) {
 
-          c.classList.add("player");
+          c.classList.add(
+            "player"
+          );
+
         }
+
       }
 
+
       game.appendChild(c);
+
     }
+
   }
+
 }
 
 
-// ------------------------------------------------------------
-// Keyboard
-// ------------------------------------------------------------
+/* ============================================================
+   KEYBOARD CONTROLS
+   ============================================================ */
 
-document.addEventListener("keydown", e => {
+document.addEventListener(
+  "keydown",
+  e => {
 
-  const k = e.key.toLowerCase();
+    const k =
+      e.key.toLowerCase();
 
-  if (
-    [
+
+    const controls = [
       "arrowup",
       "arrowdown",
       "arrowleft",
@@ -459,85 +1161,97 @@ document.addEventListener("keydown", e => {
       "d",
       "r",
       "z"
-    ].includes(k)
-  ) {
-    e.preventDefault();
+    ];
+
+
+    if (
+      controls.includes(k)
+    ) {
+
+      e.preventDefault();
+
+    }
+
+
+    /* Restart */
+
+    if (k === "r") {
+
+      reset();
+
+    }
+
+
+    /* Undo */
+
+    else if (k === "z") {
+
+      undo();
+
+    }
+
+
+    /* Up */
+
+    else if (
+      k === "arrowup" ||
+      k === "w"
+    ) {
+
+      move(0, -1);
+
+    }
+
+
+    /* Down */
+
+    else if (
+      k === "arrowdown" ||
+      k === "s"
+    ) {
+
+      move(0, 1);
+
+    }
+
+
+    /* Left */
+
+    else if (
+      k === "arrowleft" ||
+      k === "a"
+    ) {
+
+      move(-1, 0);
+
+    }
+
+
+    /* Right */
+
+    else if (
+      k === "arrowright" ||
+      k === "d"
+    ) {
+
+      move(1, 0);
+
+    }
+
   }
+);
 
 
-  if (k === "r") {
-    reset();
-  }
+/* ============================================================
+   START GAME
+   ============================================================ */
 
-  else if (k === "z") {
-    undo();
-  }
+buildStageSelect();
 
-  else if (k === "arrowup" || k === "w") {
-    move(0, -1);
-  }
-
-  else if (k === "arrowdown" || k === "s") {
-    move(0, 1);
-  }
-
-  else if (k === "arrowleft" || k === "a") {
-    move(-1, 0);
-  }
-
-  else if (k === "arrowright" || k === "d") {
-    move(1, 0);
-  }
-
-});
-
-
-// Start
 loadLevel(0);
+
 </script>
+
+</body>
+</html>
 ```
-
-You also need to add this **Next Stage button** immediately after your existing Restart button:
-
-```html
-<button id="nextBtn"
-        onclick="nextStage()"
-        style="display:none; margin-left:8px;">
-  Next Stage →
-</button>
-```
-
-And I'd make one small CSS change so the larger stages fit better:
-
-```css
-:root { --s: 60px; }
-
-@media (max-width: 700px) {
-  :root { --s: 42px; }
-
-  .cell {
-    font-size: 28px;
-  }
-
-  .box {
-    font-size: 32px;
-  }
-}
-```
-
-### One important note
-
-The 10 layouts above are **challenge layouts**, but they are not all mathematically verified as solvable Sokoban puzzles. If you want this to feel like a real polished game, the better next step is for me to create **10 guaranteed-solvable stages**, with difficulty progressing like:
-
-**1 → Tutorial**
-**2 → Easy**
-**3 → Easy+**
-**4 → Medium**
-**5 → Medium+**
-**6 → Hard**
-**7 → Hard+**
-**8 → Expert**
-**9 → Expert+**
-**10 → Boss**
-
-and include **move counters + stage select + best score + localStorage save**. That would make it much closer to a finished GitHub game rather than just 10 random boards.
